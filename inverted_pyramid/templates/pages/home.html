@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <form method="POST" action="{% url 'inverted_pyramid:result' %}">
+        {% csrf_token %}
+        <label for="name">Digite um nome:</label>
+        <input type="text" id="name" name="name">
+        <button type="submit">Enviar</button>
+    </form>
+    
+  
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=h1, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Resultado</h1>
+    <p>O nome digitado foi: {{ name }}</p>
+
+
+    <table>
+        <tr>
+            {% for number in numerology_vowels_binary %}
+                <td>{{ number }}</td>
+                <td></td>
+            {% endfor %}
+            <td>=</td>
+            <td>Impressão</td>
+            <td>{{ decomposed_vowels }}</td>
+        </tr>   
+    
+        <tr>
+            {% for letter in name %}
+                <td>{{ letter }}</td>
+                <td></td>
+            {% endfor %}
+        </tr> 
+    
+        <tr>
+            {% for number in numerology_consonants_binary %}
+                <td>{{ number }}</td>
+                <td></td>
+            {% endfor %}
+            <td>=</td>
+            <td>Motivação</td>
+            <td>{{ decomposed_consonants }}</td>
+        </tr>
+
+        <tr>
+            {% for number in numerology_alpha_binary %}
+                <td>{{ number }}</td>
+                <td></td>
+            {% endfor %}
+            <td>=</td>
+            <td>Expressão</td>
+            <td>{{ decomposed_alpha }}</td>
+        </tr>
+        
+    </table>
+    <body bgcolor="#98bcc2">
+
+        <div align="center">
+        <table bgcolor="#98bcc2">
+          <tbody><tr>
+            <td align="center"><h1><font color="#346d78"><b><u>NUMEROLOGIA</u></b></font> </h1>
+            MÉTODO DA PIRÂMIDE INVERTIDA
+            <br><br><font size="5">Escreva no espaço abaixo o seu nome completo:</font><br><br>
+        </td>
+          </tr>
+          <tr>
+            <td align="center"><input onkeydown="kabbalahNumerologyNameHandle(this, 'kabbalahNumerologyPyramid_result', 'kabbalahNumerologyReport_result')"></td>
+          </tr>
+          <tr>
+            <td align="center"><div id="kabbalahNumerologyPyramid_result"></div></td>
+          </tr>
+          <tr>
+            <td align="left"><div id="kabbalahNumerologyReport_result"></div></td>
+          </tr>
+        </tbody></table>
+        </div>
+        
+        </body>
+
+    <script>
+//Kaballah Numerology Definitions
+//Character value definitions
+const digitValues = {	
+    "A_1":1,
+    "A_2":2,
+    "A_3":3,
+    "A_4":4,
+    "A_5":5,
+    "A_6":6,
+    "A_7":7,
+    "A_8":8,
+    "A_9":9
+};
+const vowelValues = {	
+    "A_a": 1,
+    "A_e": 5,
+    "A_i": 1,
+    "A_o": 7,
+    "A_u": 6,
+    "A_á": 3,
+    "A_é": 7,
+    "A_í": 3,
+    "A_ó": 9,
+    "A_ú": 8,
+    "A_à": 2,
+    "A_è": 1,
+    "A_ì": 2,
+    "A_ò": 5,
+    "A_ù": 3,
+    "A_â": 8,
+    "A_ê": 3,
+    "A_î": 8,
+    "A_ô": 5,
+    "A_û": 4,
+    "A_ã": 3,
+    "A_õ": 1,
+    "A_ü": 3,
+};
+const consonantValues = {
+    "A_b": 2,
+    "A_c": 3,
+    "A_d": 4,
+    "A_f": 8,
+    "A_g": 3,
+    "A_h": 5,
+    "A_j": 1,
+    "A_k": 2,
+    "A_l": 3,
+    "A_m": 4,
+    "A_n": 5,
+    "A_p": 8,
+    "A_q": 1,
+    "A_r": 2,
+    "A_s": 3,
+    "A_t": 4,
+    "A_v": 6,
+    "A_w": 6,
+    "A_x": 6,
+    "A_y": 1,
+    "A_z": 7,
+    "A_ç": 6,
+};
+const digitReductionArray = [
+[0,1,2,3,4,5,6,7,8,9],
+[1,2,3,4,5,6,7,8,9,1],
+[2,3,4,5,6,7,8,9,1,2],
+[3,4,5,6,7,8,9,1,2,3],
+[4,5,6,7,8,9,1,2,3,4],
+[5,6,7,8,9,1,2,3,4,5],
+[6,7,8,9,1,2,3,4,5,6],
+[7,8,9,1,2,3,4,5,6,7],
+[8,9,1,2,3,4,5,6,7,8],
+[9,1,2,3,4,5,6,7,8,9]
+];
+const interpretationData = [
+/*0*/null,
+/*1*/["Força, poder, originalidade, iniciativa e liderança; pioneirismo, criatividade e ambição; autoconfiança, coragem, ousadia e controle; brilho, sucesso, conquistas e posses; independência, autoridade, determinação.","Arrogância, agressividade, orgulho, autoritarismo, egoísmo, cinismo e solidão; preguiça, presunção e falta de iniciativa.","com a independência e iniciativa, torna o indivíduo limitado e sem coragem, causando um longo período de paralização, podendo provocar doenças ligadas í  circulação tais como: derrame, enfarte, embolia e aneurisma."],
+/*2*/["Cooperação, participação, concessão; flexibilidade, sociabilidade, adaptação; facilidade de relacionamento, diplomacia, gentileza, cordialidade; atencioso e receptivo.","Submissão, timidez, insegurança, indecisão; inibição, descuido, apatia; dependência, depressão.","com a autoconfiança, fazendo a pessoa tímida e indecisa, tornando-as capacho de tudo e de todos. Pode tornar a pessoa hipocondríaca e sujeita a doenças que causem dependência."],
+/*3*/["Imaginação, criatividade, múltiplos talentos; sociabilidade, comunicação, valorização da beleza; fertilidade, multiplicação; divertido, otimista, benquisto; interessante, interessado.","Desordenado, desastrado; exagero, extravagância; superficialidade, tagarelice; exibicionismo, excesso de vaidade; ciúme.","com a comunicação, provocando incompreensão dos outros dos outros, a falta de diálogo, a dificuldade em se impor, podendo causar doenças respiratórias."],
+/*4*/["Ordem, disciplina, organização, rigidez, equilíbrio; dedicação, sacrifício, trabalhador nato e obediente, resistente, incansável; honestidade, sinceridade, lealdade; estabilidade, persistência.","Sistemático, visão limitada, tedioso; teimosia, inflexibilidade, sovinice; excesso de cautela, conservadorismo; inveja; medo do novo.","com o trabalho e organização, tornando difícil qualquer realização, as atividades são árduas e sem compensação, provocando frieza e indiferença, podendo causar doenças de articulação, reumatismo e enrijecimento das artérias."],
+/*5*/["Liberdade, independência; versatilidade, facilidade de adaptação; desprendido, aventureiro, cigano; ousadia, coragem; sensualidade, sexualidade ativa; sociabilidade; esperteza.","Irresponsabilidade; irreflexão, instabilidade; ansiedade, inquietação, temperamental; impulsividade; insatisfação; agitado, barulhento; abusos e vicios.","com a instabilidade financeira e emocional causando mudanças não desejadas de casa, de profissão e de meio social e, possivelmente, doenças superficiais mas destrutivas."],
+/*6*/["Tranquilidade, paz, calma; emotividade, afeição, amorosidade; caseiro, valoriza o lar; amizade, simpatia; conciliação, cooperação; bondade, solicitude; idealismo.","Acomodação, desleixo, irresponsabilidade; paternalismo; controlador da vida alheia; apego excessivo aos familiares; excesso de preocupação; presunção, convencionalismo; ansiedade, ciúme.","com os afetos e qualquer sentimento ligado ao coração, trazendo decepções com amigos, sócios, parentes e cônjuge, provocando inclusive doença cardíaca."],
+/*7*/["Análise, introspecção, autocontrole; intelectualidade, cultura, racionalidade; perfeccionismo, exigência; sensibilidade, intuição; misticismo, superstição; seletividade, refinamento; honra, fidelidade.","Arredio, confuso, vago; excesso de racionalidade; alto grau de exigência, mania de criticar; apreensão, nervosismo, vícios; sarcasmo; solidão; autodestruição.","com a indecisão, intolerância, trazendo o afastamento dos outros e da própria pessoa, provocando sentimento de solidão e doenças nervosas."],
+/*8*/["Direto, objetivo, verdadeiro; capacidade de organização, praticidade; retidão, autoridade; sucesso material, prestígio, ambição; talento para altos cargos; visionário.","Injustiça, vingança, dominação; desonestidade, crueldade, uso das pessoas; autoritarismo, teimosia; egoísmo, ganância, excesso de apego ao material; mau uso da autoridade, sede de poder; frieza.","com dificuldade financeira e social, trazendo o ônus de uma longa doença grave da pessoa ou de algum dependente dela."],
+/*9*/["Humano, solícito, impessoal, compreensivo, generoso, prestativo, justo, capaz de amor incondicional; capacidade de realização, determinação; romantismo, sentimentalismo; magnetismo, Intuição; sentido artístico; ausência de preconceitos; visionário.","Possessivo, acusador, rabugento, teimoso; vícios, autodestruição; mal humorado, temperamental; extravagância; bajulação; excessiva emotividade; indiscrição; melancolia e principalmente egoísmo.","com relação a finanças, causando grandes perdas de dinheiro, podendo trazer grandes provações de todos os tipos í  pessoa."],
+/*10*/null,
+/*11*/["Inspiração, intuição; sensibilidade desenvolvida; espiritualismo; sentido artístico, múltiplas habilidades.","Apreensão, nervosismo, vícios; paranoia, mania de perseguição; negligência em relação ao material; instabilidade.","é o primeiro número mestre, e é também conhecido como o número da fama."],
+/*12*/null,
+/*13*/null,
+/*14*/null,
+/*15*/null,
+/*16*/null,
+/*17*/null,
+/*18*/null,
+/*19*/null,
+/*20*/null,
+/*21*/null,
+/*22*/["Sabedoria nata, genialidade, facilidade de ensinar; força, vigor; espiritualismo, magia; futurista, sonhador.","Ganância, corrupção; destruição acentuada; imprudência; uso da magia para o mal ou para si próprio.","é o segundo número mestre e está relacionado a fama internacional e também empreendedorismo vitorioso."],
+/*23*/null,
+/*24*/null,
+/*25*/null,
+/*26*/null,
+/*27*/null,
+/*28*/null,
+/*29*/null,
+/*30*/null,
+/*31*/null,
+/*32*/null,
+/*33*/["Reúne as qualidades e defeitos dos dois primeiros, do número 11 e número 22. Inspiração, intuição; sensibilidade desenvolvida; espiritualismo; sentido artístico, múltiplas habilidades. Sabedoria nata, genialidade, facilidade de ensinar; força, vigor; espiritualismo, magia; futurista, sonhador.","Reúne as qualidades e defeitos dos dois primeiros, do número 11 e número 22. Apreensão, nervosismo, vícios; paranoia, mania de perseguição; negligência em relação ao material; instabilidade. Ganância, corrupção; destruição acentuada; imprudência; uso da magia para o mal ou para si próprio.","é o terceiro número mestre e é a somatória dos dois primeiros, e portanto é o maior e mais perfeito número mestre, sendo associado í  Cristo."],
+];
+// Integer reduction by sum
+function intReduction(count){
+var sCount = count.toString();
+while ((sCount.length>1) && (count!=11) && (count!=22) && (count!=33))
+{
+count = 0;
+for (var j=0;j<sCount.length;j++) count+=parseInt(sCount[j]);
+sCount = count.toString();
+}
+return count;
+}
+
+//Kaballah Numerology Start
+var vowel_count = 0;
+var consonant_count = 0;
+var alphanum_count = 0;
+var vowel_data = [];
+var consonant_data = [];
+var alphanum_data = [];
+var vowel_value = [];
+var consonant_value = [];
+var alphanum_value = [];
+var vowel_reduct = 0;
+var consonant_reduct = 0;
+var alphanum_reduct = 0;
+var pyramid_value = [];
+var pyramid_triads = [];
+var triads_set = [];
+
+function kabbalahNumerologyNameCalc(name) {
+vowel_data = [];
+vowel_value = [];
+vowel_count = 0;
+consonant_data = [];
+consonant_value = [];
+consonant_count = 0;
+alphanum_data = [];
+alphanum_value = [];
+alphanum_count = 0;
+name = name.toLowerCase();
+var pyramid_level = [];
+for (var i=0;i<name.length;i++)
+{
+if (vowelValues["A_"+name[i]]) {
+    vowel_data.push(name[i]);
+    consonant_data.push(null);
+    alphanum_data.push(name[i]);
+    vowel_value.push(vowelValues["A_"+name[i]]);
+    consonant_value.push(0);
+    alphanum_value.push(vowelValues["A_"+name[i]]);
+    vowel_count += vowelValues["A_"+name[i]];
+}
+else if (consonantValues["A_"+name[i]]) {
+    vowel_data.push(null);
+    consonant_data.push(name[i]);
+    alphanum_data.push(name[i]);
+    vowel_value.push(0);
+    consonant_value.push(consonantValues["A_"+name[i]]);
+    alphanum_value.push(consonantValues["A_"+name[i]]);
+    consonant_count += consonantValues["A_"+name[i]];
+}
+else if (digitValues["A_"+name[i]]) {
+    vowel_data.push(name[i]);
+    consonant_data.push(null);
+    alphanum_data.push(name[i]);
+    vowel_value.push(digitValues["A_"+name[i]]);
+    consonant_value.push(0);
+    alphanum_value.push(digitValues["A_"+name[i]]);
+    vowel_count += digitValues["A_"+name[i]];
+}
+alphanum_count = vowel_count + consonant_count;
+vowel_reduct = intReduction(vowel_count);
+consonant_reduct = intReduction(consonant_count);
+alphanum_reduct = intReduction(alphanum_count);
+pyramid_value = [];
+pyramid_value.push(alphanum_value);
+}
+// Pyramid construction
+while (pyramid_value[pyramid_value.length-1].length>1){
+pyramid_level = new Array(pyramid_value[pyramid_value.length-1].length-1);
+for(var j=0;j<pyramid_value[pyramid_value.length-1].length-1;j++){
+    pyramid_level[j] = digitReductionArray[pyramid_value[pyramid_value.length-1][j]][pyramid_value[pyramid_value.length-1][j+1]]
+}
+pyramid_value.push(pyramid_level);
+}
+// Mark triads
+pyramid_triads = [];
+triads_set = [];
+for (var i=0;i<pyramid_value.length-2;i++) {
+for (var j=2;j<pyramid_value[i].length;j++) {
+    if ( (pyramid_value[i][j])==(pyramid_value[i][j-1]) && (pyramid_value[i][j])==(pyramid_value[i][j-2]) ) {
+        pyramid_triads.push([pyramid_value[i][j],i,j-2]);
+        if(triads_set.indexOf(pyramid_value[i][j]) == -1) triads_set.push(pyramid_value[i][j]);
+        pyramid_value[i][j-2] = "<span style=\"color:red\">"+pyramid_value[i][j-2]+"</span>";
+        pyramid_value[i][j-1] = "<span style=\"color:red\">"+pyramid_value[i][j-1]+"</span>";
+        pyramid_value[i][j] = "<span style=\"color:red\">"+pyramid_value[i][j]+"</span>";
+    }
+}
+}
+return name;
+}
+
+// Output
+const br = "<br />\n";
+const hr = "<hr>\n";
+const nbsp = "\&nbsp;";
+
+function kabbalahNumerologyNameHandleFormat() {
+var pyramid_data = [];
+var tempArray;
+// Sum of consonant
+tempArray = [];
+var is_first_consonant = true;
+for(var i=0;i<consonant_value.length;i++) {
+if (consonant_value[i]) {
+    if (is_first_consonant)	{
+        tempArray.push(consonant_value[i]);
+        tempArray.push(nbsp);
+        is_first_consonant = false;
+    }
+    else {
+        tempArray.push(consonant_value[i]);
+        tempArray[tempArray.length-2]="+";
+        tempArray.push(nbsp);
+    }
+}
+else {
+    tempArray.push(nbsp);
+    tempArray.push(nbsp);
+};
+}
+if (consonant_count) {
+tempArray.push("Motivação =");
+tempArray.push(intReduction(consonant_count));
+}
+else {
+tempArray.push(nbsp);
+tempArray.push(nbsp);
+}
+pyramid_data.push(tempArray);
+// Sum of vowel and digit
+tempArray = [];
+var is_first_vowel = true;
+for(var i=0;i<vowel_value.length;i++) {
+if (vowel_value[i]) {
+    if (is_first_vowel)	{
+        tempArray.push(vowel_value[i]);
+        tempArray.push(nbsp);
+        is_first_vowel = false;
+    }
+    else {
+        tempArray.push(vowel_value[i]);
+        tempArray[tempArray.length-2]="+";
+        tempArray.push(nbsp);
+    }
+}
+else {
+    tempArray.push(nbsp);
+    tempArray.push(nbsp);
+};
+}
+if (vowel_count) {
+tempArray.push("Impressão =");
+tempArray.push(intReduction(vowel_count));
+}
+else {
+tempArray.push(nbsp);
+tempArray.push(nbsp);
+}
+pyramid_data.push(tempArray);
+// Name
+tempArray = [];
+for(var i=0;i<alphanum_data.length;i++) {
+tempArray.push(alphanum_data[i]);
+tempArray.push(nbsp);
+}
+tempArray.push(nbsp);
+tempArray.push(nbsp);
+pyramid_data.push(tempArray);
+// Sum of consonant, vowel and digit
+tempArray = [];
+for(var i=0;i<alphanum_value.length;i++) {
+tempArray.push(alphanum_value[i]);
+tempArray.push("+");
+}
+if (alphanum_count) tempArray[tempArray.length-1] = nbsp;
+if (alphanum_count) {
+tempArray.push("Expressão =");
+tempArray.push(intReduction(alphanum_count));
+}
+else {
+tempArray.push(nbsp);
+tempArray.push(nbsp);
+}
+pyramid_data.push(tempArray);
+// Pyramid values
+for(var i=0;i<pyramid_value.length;i++) {
+tempArray = [];
+for(var j=0;j<i;j++){
+    tempArray.push(nbsp);
+}
+for(var j=0;j<pyramid_value[i].length;j++){
+    tempArray.push(pyramid_value[i][j]);
+    tempArray.push(nbsp);
+}
+pyramid_data.push(tempArray);
+}
+// HTML table construction
+var thePyramid = "<table>\n";
+for(var i=0;i<pyramid_data.length;i++) {
+thePyramid += "<tr>\n";
+for(var j=0;j<pyramid_data[i].length;j++) {
+    thePyramid += "<td>\n";
+    thePyramid += pyramid_data[i][j];
+    thePyramid += "</td>\n";
+}
+thePyramid += "</tr>\n";
+}
+thePyramid += "</table>\n";
+// Return HTML Result
+return thePyramid;
+}
+
+function kabbalahNumerologyReportHandle(theName){
+var theReport = "";
+theReport = 
+"<h2>Numerologia do nome:</h2>\n"+
+theName+br+br;
+if (vowel_reduct>0) {
+theReport += "<p>Vogais (Impressão/Alma): "+vowel_reduct+br;
+if (vowel_reduct<=9) {
+    theReport += "Aspectos Positivos: "+interpretationData[vowel_reduct][0]+br+
+    "Aspectos Negativos: "+interpretationData[vowel_reduct][1]+br;
+}
+else {
+    theReport += interpretationData[vowel_reduct][2]+br+
+    "Aspectos Positivos: "+interpretationData[vowel_reduct][0]+br+
+    "Aspectos Negativos: "+interpretationData[vowel_reduct][1]+br;
+}
+theReport += "</p>\n";
+}
+if (consonant_reduct>0) {
+theReport += "<p>Consoantes (Motivação/Personalidade): "+consonant_reduct+br;
+if (consonant_reduct<=9) {
+    theReport += "Aspectos Positivos: "+interpretationData[consonant_reduct][0]+br+
+    "Aspectos Negativos: "+interpretationData[consonant_reduct][1]+br;
+}
+else {
+    theReport += interpretationData[consonant_reduct][2]+br;
+    theReport +=
+    "Aspectos Positivos: "+interpretationData[consonant_reduct][0]+br+
+    "Aspectos Negativos: "+interpretationData[consonant_reduct][1]+br;
+}
+theReport += "</p>\n";
+}
+if (alphanum_reduct>0) {
+theReport += "<p>Todo (Expressão): "+alphanum_reduct+br;
+if (alphanum_reduct<=9) {
+    theReport +=
+    "Aspectos Positivos: "+interpretationData[alphanum_reduct][0]+br+
+    "Aspectos Negativos: "+interpretationData[alphanum_reduct][1]+br;
+}
+else {
+    theReport += interpretationData[alphanum_reduct][2]+br+
+    "Aspectos Positivos: "+interpretationData[alphanum_reduct][0]+br+
+    "Aspectos Negativos: "+interpretationData[alphanum_reduct][1]+br;
+}
+theReport += "</p>\n";
+}
+if (triads_set.length) {
+theReport += "<p>Repetições na pirâmide:"+br;
+for (var i=0;i<triads_set.length;i++) {
+    theReport += triads_set[i].toString()+triads_set[i].toString()+triads_set[i].toString()+" - "+interpretationData[triads_set[i]][2]+br;
+}
+theReport += "</p>\n";
+}
+return theReport;
+}
+
+//Pyramid Handle
+function kabbalahNumerologyNameHandle(theObject, thePyramidContainerId, theReportContainerId){
+setTimeout(function()
+{
+    kabbalahNumerologyNameCalc(theObject.value);
+    document.getElementById(thePyramidContainerId).innerHTML = kabbalahNumerologyNameHandleFormat();
+    document.getElementById(theReportContainerId).innerHTML = kabbalahNumerologyReportHandle(theObject.value);
+},
+50
+);
+}
+
+    </script>
+
+</body>
+</html>
